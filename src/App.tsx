@@ -1,9 +1,10 @@
 import "./App.scss";
+import ProductsTable from "./components/ProductsTable/ProductsTable";
 
 function App() {
 	return (
 		<>
-			<h1>Hello world</h1>
+			<ProductsTable />
 		</>
 	);
 }
