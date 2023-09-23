@@ -29,3 +29,12 @@
 		border-color: $blue;
 	}
 }
+@media (max-width: 620px) {
+	.container {
+		flex-direction: column;
+	}
+	.pagination {
+		max-width: 50vw;
+		flex-wrap: wrap;
+	}
+}

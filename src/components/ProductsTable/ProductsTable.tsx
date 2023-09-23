@@ -1,17 +1,25 @@
+// Библиотеки
 import { useEffect, useState, useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 
+// Стили
 import styles from "./ProductsTable.module.scss";
-
+// Утилиты
 import { Product } from "../../types/Product";
 import { getData } from "../../utils/getData";
 import { compareProducts } from "../../utils/sortTable";
 
+// Компоненты
 import Loader from "../UI/Loader/Loader";
 import ProductRow from "./ProductRow/ProductRow";
 import Pagination from "../UI/Pagination/Pagination";
 import Search from "./Search/Search";
+import CardView from "../CardView/CardView";
 
 const ProductsTable = () => {
+	// Проверка разрешения
+	const isMobile = useMediaQuery({ maxWidth: 800 });
+
 	// Состояния для сортировки
 	const [sortField, setSortField] = useState(""); //Имя столбца
 	const [sortOrder, setSortOrder] = useState("asc"); //Направление сортировки
@@ -113,58 +121,62 @@ const ProductsTable = () => {
 			) : (
 				<div>
 					<Search url={url} setProducts={setProducts} />
+					{isMobile ? (
+						<CardView products={products} />
+					) : (
+						<table className={styles.table}>
+							<thead>
+								<tr>
+									<th
+										className={styles.sorting}
+										onClick={() => handleSortChange("title")}
+									>
+										Название
+										{sortField === "title" && (sortOrder === "asc" ? "▲" : "▼")}
+									</th>
+									<th>Описание</th>
+									<th
+										className={styles.sorting}
+										onClick={() => handleSortChange("price")}
+									>
+										Цена
+										{sortField === "price" && (sortOrder === "asc" ? "▲" : "▼")}
+									</th>
+									<th
+										className={styles.sorting}
+										onClick={() => handleSortChange("rating")}
+									>
+										Рейтинг
+										{sortField === "rating" &&
+											(sortOrder === "asc" ? "▲" : "▼")}
+									</th>
 
-					<table className={styles.table}>
-						<thead>
-							<tr>
-								<th
-									className={styles.sorting}
-									onClick={() => handleSortChange("title")}
-								>
-									Название
-									{sortField === "title" && (sortOrder === "asc" ? "▲" : "▼")}
-								</th>
-								<th>Описание</th>
-								<th
-									className={styles.sorting}
-									onClick={() => handleSortChange("price")}
-								>
-									Цена
-									{sortField === "price" && (sortOrder === "asc" ? "▲" : "▼")}
-								</th>
-								<th
-									className={styles.sorting}
-									onClick={() => handleSortChange("rating")}
-								>
-									Рейтинг
-									{sortField === "rating" && (sortOrder === "asc" ? "▲" : "▼")}
-								</th>
-
-								<th>В наличии</th>
-								<th
-									className={styles.sorting}
-									onClick={() => handleSortChange("brand")}
-								>
-									Бренд
-									{sortField === "brand" && (sortOrder === "asc" ? "▲" : "▼")}
-								</th>
-								<th
-									className={styles.sorting}
-									onClick={() => handleSortChange("category")}
-								>
-									Категория
-									{sortField === "category" &&
-										(sortOrder === "asc" ? "▲" : "▼")}
-								</th>
-								<th>Изображение</th>
-							</tr>
-						</thead>
-						<tbody>
-							{products.map((product) => (
-								<ProductRow key={product.id} product={product} />
-							))}
-						</tbody>
-					</table>
+									<th>В наличии</th>
+									<th
+										className={styles.sorting}
+										onClick={() => handleSortChange("brand")}
+									>
+										Бренд
+										{sortField === "brand" && (sortOrder === "asc" ? "▲" : "▼")}
+									</th>
+									<th
+										className={styles.sorting}
+										onClick={() => handleSortChange("category")}
+									>
+										Категория
+										{sortField === "category" &&
+											(sortOrder === "asc" ? "▲" : "▼")}
+									</th>
+									<th>Изображение</th>
+								</tr>
+							</thead>
+							<tbody>
+								{products.map((product) => (
+									<ProductRow key={product.id} product={product} />
+								))}
+							</tbody>
+						</table>
+					)}
 				</div>
 			)}
 			{/* Во время загрузки пагинация скрывается */}
