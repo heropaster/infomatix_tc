@@ -20,12 +20,9 @@
 
 2. Установите зависимости
    npm install
-
-# или
-
-yarn install 3. Запустите проект
-npm run dev
-
-# или
-
-yarn dev
+   \# или
+   yarn install
+3. Запустите проект
+   npm run dev
+   \# или
+   yarn dev
