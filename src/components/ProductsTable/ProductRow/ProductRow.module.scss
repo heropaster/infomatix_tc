@@ -1,10 +1,25 @@
 @import "../../../vars";
 .cell {
+	width: max-content;
 	border-radius: 2px;
 	border: 1px solid $blue;
+	.star {
+		float: right;
+	}
+}
+th,
+td {
+	border: 1px solid $blue;
+	text-align: left;
+	padding: 8px;
+}
+tr:hover {
+	background-color: var(--hover-back);
 }
 .image {
 	width: 150px;
+	padding: 0;
+	overflow: hidden;
 	img {
 		width: 100%;
 		height: 150px;

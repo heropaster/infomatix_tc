@@ -1,0 +1,31 @@
+@import "../../../vars";
+.container {
+	padding: 10px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	font-size: 22px;
+}
+.pagination {
+	list-style-type: none;
+	display: flex;
+	gap: 15px;
+	li {
+		display: inline-block;
+	}
+	&Btn {
+		font-weight: 300;
+		border-bottom: 1px solid transparent;
+		cursor: pointer;
+		transition: color 0.3s ease;
+		&:hover {
+			color: $orange;
+		}
+	}
+	.active {
+		color: $blue;
+		font-weight: 500;
+		border-color: $blue;
+	}
+}

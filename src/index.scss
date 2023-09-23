@@ -3,8 +3,13 @@
 	color-scheme: light dark;
 	--color: rgba(255, 255, 255, 0.87);
 	--background-color: #242424;
+	--hover-back: rgb(49, 49, 49);
 }
-
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
 a {
 	color: inherit;
 }
@@ -29,6 +34,7 @@ button {
 	:root {
 		--color: #213547;
 		--background-color: #ffffff;
+		--hover-back: #bfbfbf;
 	}
 	a:hover {
 		color: #747bff;

@@ -1,11 +1,15 @@
+@import "../../vars";
 .container {
 	position: relative;
 }
+.loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+}
 .table {
 	border-radius: 5px;
+	border-collapse: collapse;
+	width: 100%;
 	border: 1px solid var(--color);
-	thead tr {
-		display: flex;
-		gap: 10px;
-	}
 }
