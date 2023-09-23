@@ -5,19 +5,24 @@ import styles from "./ProductsTable.module.scss";
 import { Product } from "../../types/Product";
 import { getData } from "../../utils/getData";
 import { compareProducts } from "../../utils/sortTable";
+
+import Loader from "../UI/Loader/Loader";
 import ProductRow from "./ProductRow/ProductRow";
 import Pagination from "../UI/Pagination/Pagination";
 import Search from "./Search/Search";
 
 const ProductsTable = () => {
-	// Для сортировки
+	// Состояния для сортировки
 	const [sortField, setSortField] = useState(""); //Имя столбца
 	const [sortOrder, setSortOrder] = useState("asc"); //Направление сортировки
 
+	// Состояния для загрузки данных
 	const [products, setProducts] = useState<Product[]>([]); //Массив продуктов(Проверка на типы присутсвует)
 	const [isLoading, setIsLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
 	const totalProducts = useRef(0);
+
+	// Константы
 	const pageSize = 10; // Количество продуктов на странице
 	const url = "https://dummyjson.com/products";
 
@@ -49,6 +54,7 @@ const ProductsTable = () => {
 								...prevCache,
 								[currentPage]: data.products,
 							}));
+
 							totalProducts.current = data.total;
 							setProducts(data.products);
 							setIsLoading(false);
@@ -65,6 +71,8 @@ const ProductsTable = () => {
 	const handlePageChange = (newPage: number) => {
 		setCurrentPage(newPage);
 	};
+
+	// Сортировка при клике
 	const handleSortChange = (field: string) => {
 		// Функция для смены поля сортировки
 		if (field === sortField) {
@@ -75,7 +83,9 @@ const ProductsTable = () => {
 			setSortField(field);
 			setSortOrder("asc");
 		}
+		setProducts(sortProducts());
 	};
+
 	const sortProducts = () => {
 		// Если поле не задано(Первый вызов)
 		if (!sortField) {
@@ -95,13 +105,13 @@ const ProductsTable = () => {
 
 		return sorted;
 	};
-	const sortedProducts = sortProducts();
+
 	return (
 		<div className={styles.container}>
 			{isLoading ? (
-				<div className={styles.loader}>Загрузка данных...</div>
+				<Loader className="mainLoader" />
 			) : (
-				<div className={styles.content}>
+				<div>
 					<Search url={url} setProducts={setProducts} />
 
 					<table className={styles.table}>
@@ -150,7 +160,7 @@ const ProductsTable = () => {
 							</tr>
 						</thead>
 						<tbody>
-							{sortedProducts.map((product) => (
+							{products.map((product) => (
 								<ProductRow key={product.id} product={product} />
 							))}
 						</tbody>

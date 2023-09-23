@@ -15,6 +15,9 @@ interface SearchProps {
 
 const Search: React.FC<SearchProps> = ({ url, setProducts }) => {
 	const [isSearching, setIsSearching] = useState(false);
+	const [searchErrorMessage, setSearchErrorMessage] = useState<string | null>(
+		null
+	);
 
 	const [quest, setQuest] = useState("");
 	const handleChange = (value: string) => {
@@ -30,31 +33,44 @@ const Search: React.FC<SearchProps> = ({ url, setProducts }) => {
 			})
 			.then(async (response) => {
 				const data = await response.json();
-				setProducts(data.products);
+				console.log(data);
+				if (data.total === 0) {
+					setSearchErrorMessage("Продуктов не найдено!");
+					setTimeout(() => {
+						setSearchErrorMessage(null); // Очищаем сообщение об ошибке через 2 секунды
+					}, 2000);
+				} else {
+					setProducts(data.products);
+				}
 				setIsSearching(false);
 			});
 	};
 	return (
-		<div className={styles.container}>
-			<Input
-				type="text"
-				value={quest}
-				onChange={(e) => {
-					handleChange(e.target.value);
-				}}
-				placeholder="Напишите что хотите найти"
-				className=""
-			/>
-			<Button
-				text={"Поиск"}
-				action={() => {
-					handleClick();
-				}}
-				className="search"
-				disabled={false}
-			/>
-			{isSearching && <Loader />}
-		</div>
+		<>
+			<div className={styles.container}>
+				<Input
+					type="text"
+					value={quest}
+					onChange={(e) => {
+						handleChange(e.target.value);
+					}}
+					placeholder="Напишите что хотите найти"
+					className=""
+				/>
+				<Button
+					text={"Поиск"}
+					action={() => {
+						handleClick();
+					}}
+					className="search"
+					disabled={false}
+				/>
+				{isSearching && <Loader className="searchLoader" />}
+			</div>
+			{searchErrorMessage && (
+				<div className={styles.errorMessage}>{searchErrorMessage}</div>
+			)}
+		</>
 	);
 };
 export default Search;

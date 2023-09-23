@@ -1,7 +1,13 @@
+@import "../../../vars";
 .container {
 	position: relative;
 	margin-bottom: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+.errorMessage {
+	font-size: 22px;
+	color: $orange;
+	margin: 15px 0;
 }
