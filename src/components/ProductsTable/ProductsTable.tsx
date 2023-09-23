@@ -1,16 +1,21 @@
 import { useEffect, useState, useRef } from "react";
 
 import styles from "./ProductsTable.module.scss";
+
 import { Product } from "../../types/Product";
 import { getData } from "../../utils/getData";
+
 import ProductRow from "./ProductRow/ProductRow";
 import Pagination from "../UI/Pagination/Pagination";
+import Search from "./Search/Search";
+
 const ProductsTable = () => {
 	const [products, setProducts] = useState<Product[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
 	const totalProducts = useRef(0);
 	const pageSize = 10; // Количество продуктов на странице
+	const url = "https://dummyjson.com/products";
 
 	// Локальный кэш для хранения данных страниц
 	const [pageDataCache, setPageDataCache] = useState<{
@@ -28,7 +33,7 @@ const ProductsTable = () => {
 					setIsLoading(true);
 					// Заголовок для скипа предыдущих продуктов
 					const skip = (currentPage - 1) * pageSize;
-					getData("https://dummyjson.com/products", pageSize, skip)
+					getData(url, pageSize, skip)
 						.then(async (response) => {
 							const data = await response.json();
 							return data;
@@ -58,6 +63,7 @@ const ProductsTable = () => {
 	};
 	return (
 		<div className={styles.container}>
+			<Search url={url} />
 			{isLoading ? (
 				<div className={styles.loader}>Загрузка данных...</div>
 			) : (

@@ -1,3 +1,4 @@
+@import "../../../vars";
 .btn {
 	border-radius: 10px;
 	cursor: pointer;
@@ -11,7 +12,7 @@
 	padding: 10px 15px;
 	transition: 0.3s ease-in-out;
 	&:hover {
-		box-shadow: 0px 1px 8px 3px rgba(255, 255, 255, 0.2);
+		box-shadow: $shadow;
 	}
 	&:disabled {
 		background: #222;
