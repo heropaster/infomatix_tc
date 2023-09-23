@@ -122,7 +122,7 @@ const ProductsTable = () => {
 				<div>
 					<Search url={url} setProducts={setProducts} />
 					{isMobile ? (
-						<CardView products={products} />
+						<CardView products={products} setProducts={setProducts} />
 					) : (
 						<table className={styles.table}>
 							<thead>
