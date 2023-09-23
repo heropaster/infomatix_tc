@@ -4,13 +4,17 @@ import styles from "./ProductsTable.module.scss";
 
 import { Product } from "../../types/Product";
 import { getData } from "../../utils/getData";
-
+import { compareProducts } from "../../utils/sortTable";
 import ProductRow from "./ProductRow/ProductRow";
 import Pagination from "../UI/Pagination/Pagination";
 import Search from "./Search/Search";
 
 const ProductsTable = () => {
-	const [products, setProducts] = useState<Product[]>([]);
+	// Для сортировки
+	const [sortField, setSortField] = useState(""); //Имя столбца
+	const [sortOrder, setSortOrder] = useState("asc"); //Направление сортировки
+
+	const [products, setProducts] = useState<Product[]>([]); //Массив продуктов(Проверка на типы присутсвует)
 	const [isLoading, setIsLoading] = useState(true);
 	const [currentPage, setCurrentPage] = useState(1);
 	const totalProducts = useRef(0);
@@ -61,28 +65,92 @@ const ProductsTable = () => {
 	const handlePageChange = (newPage: number) => {
 		setCurrentPage(newPage);
 	};
+	const handleSortChange = (field: string) => {
+		// Функция для смены поля сортировки
+		if (field === sortField) {
+			// Если выбрано текущее поле сортировки, меняем направление сортировки
+			setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+		} else {
+			// Если выбрано новое поле сортировки, сбрасываем направление сортировки к "asc"
+			setSortField(field);
+			setSortOrder("asc");
+		}
+	};
+	const sortProducts = () => {
+		// Если поле не задано(Первый вызов)
+		if (!sortField) {
+			return products;
+		}
+		// Копия массива
+		const sorted = [...products];
+
+		sorted.sort((productA, productB) => {
+			return compareProducts(
+				productA,
+				productB,
+				sortField as keyof Product,
+				sortOrder as "asc" | "desc"
+			);
+		});
+
+		return sorted;
+	};
+	const sortedProducts = sortProducts();
 	return (
 		<div className={styles.container}>
-			<Search url={url} />
 			{isLoading ? (
 				<div className={styles.loader}>Загрузка данных...</div>
 			) : (
 				<div className={styles.content}>
+					<Search url={url} setProducts={setProducts} />
+
 					<table className={styles.table}>
 						<thead>
 							<tr>
-								<th>Название</th>
+								<th
+									className={styles.sorting}
+									onClick={() => handleSortChange("title")}
+								>
+									Название
+									{sortField === "title" && (sortOrder === "asc" ? "▲" : "▼")}
+								</th>
 								<th>Описание</th>
-								<th>Цена</th>
-								<th>Рейтинг</th>
+								<th
+									className={styles.sorting}
+									onClick={() => handleSortChange("price")}
+								>
+									Цена
+									{sortField === "price" && (sortOrder === "asc" ? "▲" : "▼")}
+								</th>
+								<th
+									className={styles.sorting}
+									onClick={() => handleSortChange("rating")}
+								>
+									Рейтинг
+									{sortField === "rating" && (sortOrder === "asc" ? "▲" : "▼")}
+								</th>
+
 								<th>В наличии</th>
-								<th>Бренд</th>
-								<th>Категория</th>
+								<th
+									className={styles.sorting}
+									onClick={() => handleSortChange("brand")}
+								>
+									Бренд
+									{sortField === "brand" && (sortOrder === "asc" ? "▲" : "▼")}
+								</th>
+								<th
+									className={styles.sorting}
+									onClick={() => handleSortChange("category")}
+								>
+									Категория
+									{sortField === "category" &&
+										(sortOrder === "asc" ? "▲" : "▼")}
+								</th>
 								<th>Изображение</th>
 							</tr>
 						</thead>
 						<tbody>
-							{products.map((product) => (
+							{sortedProducts.map((product) => (
 								<ProductRow key={product.id} product={product} />
 							))}
 						</tbody>

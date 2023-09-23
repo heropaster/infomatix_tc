@@ -5,11 +5,14 @@
 .loader {
 	position: absolute;
 	top: 50%;
-	left: 50%;
+	left: 33%;
 }
 .table {
 	border-radius: 5px;
 	border-collapse: collapse;
 	width: 100%;
 	border: 1px solid var(--color);
+	.sorting {
+		cursor: pointer;
+	}
 }
